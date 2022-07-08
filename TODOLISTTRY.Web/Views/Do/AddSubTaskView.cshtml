@@ -1,0 +1,51 @@
+﻿@model DoCreateSubTaskViewModel
+@inject IHtmlLocalizer<SharedResource> Localizer
+
+@{
+    ViewData["Title"] = @Localizer["CreatingSubTask"].Value + " " + Model.Title;
+}
+
+<div id="addsubtask_form">
+    <div>
+        <h3 class="text-center">@Localizer["CreatingSubTask"].Value @ViewBag.TaskTitle</h3>
+    </div>
+    @using(Html.BeginForm("AddSubTask","Do",FormMethod.Post,new
+       {
+            data_ajax_method = "POST",
+            data_ajax_update = "#ajaxupdating"
+    }))
+    {
+        @Html.AntiForgeryToken();
+        @Html.HiddenFor(m => m.Id);
+
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Title)
+            @Html.TextBoxFor((m => m.Title),
+                new {@class = "form-control",placeholder = $"{@Localizer["PHTitle"].Value}"})
+            @Html.ValidationMessageFor(m => m.Title)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Description)
+            @Html.TextBoxFor((m => m.Description),
+                new {@class = "form-control",placeholder = $"{@Localizer["PHDescription"].Value}"})
+            @Html.ValidationMessageFor(m => m.Description)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Executors)
+            @Html.TextBoxFor((m => m.Executors),
+                new {@class = "form-control",placeholder = $"{@Localizer["PHExecutors"].Value}"})
+            @Html.ValidationMessageFor(m => m.Executors)
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.Plan)
+            @Html.TextBoxFor((m => m.Plan),
+                new {@class ="form-control", @type = "date", @Value = Model.Plan.ToString("d:0")})
+            @Html.ValidationMessageFor(m => m.Plan)
+        </div>
+
+        <button class="btn btn-primary" type="submit">@Localizer["AddSubTaskButtonText"]</button>
+        @Html.ActionLink($"{@Localizer["BackButtonText"].Value}","Index","Do","",new {@class = "btn btn-danger"})
+    }
+
+</div>

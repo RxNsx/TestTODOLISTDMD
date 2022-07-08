@@ -1,0 +1,58 @@
+﻿@model DoCreateViewModel
+@inject IHtmlLocalizer<SharedResource> Localizer
+
+@{
+    ViewData["Title"] = "Создать задачу";
+}
+
+<div id="createtask_form">
+
+<h3 class="text-center">@Localizer["CreatingTask"].Value</h3>
+
+    @using(Html.BeginForm("CreateDo","Do",FormMethod.Post,new
+    {
+               data_ajax_method = "POST",
+               data_ajax_update = "#ajaxupdating"
+    }))
+    {
+     @Html.AntiForgeryToken();
+
+
+    @Html.HiddenFor(m => m.Id);
+    <div class="validation" asp-validation-summary="ModelOnly"></div>
+    <div class="form-group">
+        @Html.Label(@Localizer["Title"].Value)
+        @Html.TextBoxFor((m => m.Title),
+            new {@class = "form-control",placeholder = $"{@Localizer["PHTitle"].Value}"})
+        @Html.ValidationMessageFor(m => m.Title)
+    </div>
+    <div class="form-group">
+        @Html.Label(@Localizer["Description"].Value)
+        @Html.TextBoxFor((m => m.Description),
+            new {@class = "form-control",placeholder = $"{@Localizer["PHDescription"].Value}"})
+        @Html.ValidationMessageFor(m => m.Description)
+    </div>
+    <div class="form-group">
+        @Html.Label(@Localizer["Executors"].Value)
+        @Html.TextBoxFor((m => m.Executors),
+            new {@class = "form-control",placeholder = $"{@Localizer["PHExecutors"].Value}"})
+        @Html.ValidationMessageFor(m => m.Executors)
+    </div>
+    <div class="form-group">
+        @Html.Label(@Localizer["Plan"].Value)
+        @Html.TextBoxFor((m => m.Plan),
+            new {@class ="form-control", @type = "date", @Value = Model.Plan.ToString("d:0")})
+        @Html.ValidationMessageFor(m => m.Plan)
+    </div>
+    <div class="m-2">
+        <button class="btn btn-primary" type="submit">@Localizer["CreateButtonText"]</button>
+        @Html.ActionLink($"{@Localizer["BackButtonText"].Value}", "Index", "Do",null, new
+        {
+            data_ajax_method = "GET",
+            data_ajax_update = "#ajaxupdating",
+            @class = "btn btn-danger"
+        })
+    </div>
+
+}
+</div>

@@ -1,0 +1,64 @@
+﻿@using TODOLISTTRY.Services.DTO
+@model IEnumerable<DoDTO>
+
+<ul class="list-group-item">
+@foreach(var subtask in Model)
+{
+    @switch(subtask.Status)
+    {
+            case DoDTOStatus.Done:
+                <li class="list-group-item list-group-item-action list-group-item-success">
+                    @Html.ActionLink($"{@subtask.Title}","GetDetailsView","Do",new {@subtask.Id },
+                    new 
+                    {
+                        data_ajax = "true",
+                        data_ajax_method = "GET",
+                        data_ajax_update = "#ajaxupdating"
+                    }
+                ) 
+            </li>
+            break;
+        case DoDTOStatus.Paused:
+            <li class="list-group-item list-group-item-action list-group-item-danger">
+                    @Html.ActionLink($"{@subtask.Title}","GetDetailsView","Do",new {@subtask.Id },
+                    new 
+                    {
+                        data_ajax = "true",
+                        data_ajax_method = "GET",
+                        data_ajax_update = "#ajaxupdating"
+                    }
+                ) 
+            </li>
+            break;
+        case DoDTOStatus.Processing:
+            <li class="list-group-item list-group-item-action list-group-item-warning">
+                @Html.ActionLink($"{@subtask.Title}","GetDetailsView","Do",new {@subtask.Id },
+                    new 
+                    {
+                        data_ajax = "true",
+                        data_ajax_method = "GET",
+                        data_ajax_update = "#ajaxupdating"
+                    }
+                ) 
+            </li>
+            break;
+        default:
+            <li class="list-group-item list-group-item-action list-group-item-light">
+                @Html.ActionLink($"{@subtask.Title}","GetDetailsView","Do",new {@subtask.Id },
+                    new 
+                    {
+                        data_ajax = "true",
+                        data_ajax_method = "GET",
+                        data_ajax_update = "#ajaxupdating"
+                    }
+                ) 
+            </li>
+            break;
+    }
+
+    @if(@subtask.SubTasks.Count() > 0)
+    {
+        @await Html.PartialAsync("_DoSubTasksPartialView",@subtask.SubTasks)
+    }
+}
+</ul>

@@ -1,0 +1,69 @@
+﻿@model DoUpdateViewModel
+@inject IHtmlLocalizer<SharedResource> Localizer
+
+@{
+    ViewData["Title"] = @Localizer["UpdateTaskTitle"].Value + " " + Model.Title;
+}
+
+<div class="update_form">
+    <div class="text-center">
+            <h3>@Localizer["UpdateTaskTitle"].Value @Model.Title</h3>
+    </div>
+
+    
+    @using(Html.BeginForm("Update","Do",FormMethod.Post,new
+    {
+               data_ajax = "true",
+               data_ajax_method = "POST",
+               data_ajax_update = "#ajaxupdating"
+    }))
+    {
+        <div class="validation" asp-validation-summary="ModelOnly"></div>
+        @Html.AntiForgeryToken();
+        @Html.HiddenFor(m => m.Id);
+        <div class="form-group">
+            @Html.Label(@Localizer["Title"].Value)
+            @Html.TextBoxFor((m => m.Title),
+                new {@class = "form-control"})
+            @Html.ValidationMessageFor(m => m.Title)
+        </div>
+        <div class="form-group">
+            @Html.Label(@Localizer["Description"].Value)
+            @Html.TextBoxFor((m => m.Description),
+                new {@class = "form-control"})
+            @Html.ValidationMessageFor(m => m.Description)
+        </div>
+        <div class="form-group">
+            @Html.Label(@Localizer["Executors"].Value)
+            @Html.TextBoxFor((m => m.Executors),
+                new {@class = "form-control"})
+            @Html.ValidationMessageFor(m => m.Executors)
+        </div>
+        <div class="form-group">
+            @Html.Label(@Localizer["Status"].Value)
+            @Html.DropDownListFor(m => m.Status,Html.StatusItemsUpdateViewModel(Model),
+                new {@class = "form-control", @value = $"{Model.Status}"})
+        </div>
+        <div class="form-group">
+            @Html.Label(@Localizer["Plan"].Value) 
+            @Html.TextBoxFor(m => m.Plan,"{0:yyyy-MM-dd}",new {@type = "date",@class = "form-control"})
+            @Html.ValidationMessageFor(m => m.Plan)
+        </div>
+        if(Model.Status == DoDTOStatus.Done)
+        {
+        <div class="form-group">
+            @Html.Label(@Localizer["Fact"].Value)
+            @Html.TextBoxFor(m => m.Fact,"{0:yyyy-MM-dd}",new {@type = "date",@class = "form-control",@disabled = "disabled"})
+            @Html.ValidationMessageFor(m => m.Fact)
+        </div>
+        }
+        <button class="btn btn-primary" type="submit">@Localizer["UpdateButtonText"]</button>
+        @Html.ActionLink($"{@Localizer["BackButtonText"].Value}", "Index", "Do",new {@Model.Id}, new
+        {
+            data_ajax = "true",
+            data_ajax_method = "GET",
+            data_ajax_update = "#ajaxupdating",
+            @class = "btn btn-danger"
+        })
+    }
+</div>

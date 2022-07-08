@@ -1,0 +1,90 @@
+﻿@using TODOLISTTRY.Services.DTO
+@model IEnumerable<DoDTO>
+@inject IHtmlLocalizer<SharedResource> Localizer
+
+
+@if(Model.Count() > 0)
+{
+<div id="tasklist">
+        <ul class="list-group">
+            <ul class="list-group-item list-group-item-light">
+            @foreach(var item in Model)
+            {
+                @switch(item.Status)
+                {
+                     case DoDTOStatus.Done:
+                         <li class="list-group-item list-group-item-action list-group-item-success">
+                             @Html.ActionLink($"{@item.Title}","GetDetailsView","Do",new {@item.Id },
+                                new 
+                                {
+                                    data_ajax = "true",
+                                    data_ajax_method = "GET",
+                                    data_ajax_update = "#ajaxupdating"
+                                }
+                            ) 
+                        </li>
+                        break;
+                    case DoDTOStatus.Paused:
+                        <li class="list-group-item list-group-item-action list-group-item-danger">
+                             @Html.ActionLink($"{@item.Title}","GetDetailsView","Do",new {@item.Id },
+                                new 
+                                {
+                                    data_ajax = "true",
+                                    data_ajax_method = "GET",
+                                    data_ajax_update = "#ajaxupdating"
+                                }
+                            ) 
+                        </li>
+                        break;
+                    case DoDTOStatus.Processing:
+                        <li class="list-group-item list-group-item-action list-group-item-warning">
+                            @Html.ActionLink($"{@item.Title}","GetDetailsView","Do",new {@item.Id },
+                                new 
+                                {
+                                    data_ajax = "true",
+                                    data_ajax_method = "GET",
+                                    data_ajax_update = "#ajaxupdating"
+                                }
+                            ) 
+                        </li>
+                        break;
+                    default:
+                        <li class="list-group-item list-group-item-action list-group-item-light">
+                            @Html.ActionLink($"{@item.Title}","GetDetailsView","Do",new {@item.Id },
+                                new 
+                                {
+                                    data_ajax = "true",
+                                    data_ajax_method = "GET",
+                                    data_ajax_update = "#ajaxupdating"
+                                }
+                            ) 
+                        </li>
+                        break;
+                }
+            if(@item.SubTasks.Count() > 0)
+                {
+                    @await Html.PartialAsync("_DoSubTasksPartialView",@item.SubTasks)
+                }
+            }
+            </ul>
+        </ul>
+        <div class="m-2 text-center">
+            @Html.ActionLink($"{@Localizer["CreateButtonText"].Value}", "CreateDoView", "Do",null, new
+            {
+               data_ajax = "true",
+               data_ajax_method = "GET",
+               data_ajax_update = "#ajaxupdating",
+               @class = "btn btn-primary"
+            })
+        </div>
+</div>
+}
+else
+{
+    <div id="tasklist_empty"></div>
+    {
+        <h6 class="text-center">Список задач пуст.. очень жаль</h6>
+    }
+}
+
+

@@ -1,0 +1,56 @@
+﻿@model DoDetailsViewModel
+@inject IHtmlLocalizer<SharedResource> Localizer
+
+@{
+    ViewData["Title"] = @Localizer["DetailsTaskTitle"].Value + " " + Model.Title;
+}
+
+<div id="getdetails_form">
+    <div class="text-center">
+        <h3>@Localizer["DetailsTaskTitle"].Value @Model.Title</h3>
+    </div>
+@using(@Html.BeginForm())
+{
+    @Html.AntiForgeryToken();
+    <div class="validation" asp-validation-summary="ModelOnly"></div>
+    <div class="form-group">
+        @Html.Label(@Localizer["Title"].Value)
+        @Html.TextBoxFor((m => m.Title),
+            new {disabled = "disabled",@class = "form-control"})
+    </div>
+    <div class="form-group">
+        @Html.Label(@Localizer["Description"].Value)
+        @Html.TextBoxFor((m => m.Title),
+            new {disabled = "disabled",@class = "form-control"})
+    </div>
+    <div class="form-group">
+        @Html.Label(@Localizer["Executors"].Value)
+        @Html.TextBoxFor((m => m.Executors),
+            new {disabled = "disabled",@class = "form-control"})
+    </div>
+     <div class="form-group">
+        @Html.Label(@Localizer["Status"].Value)
+        @Html.TextBoxFor((m => m.Status),
+            new {disabled = "disabled",@class = "form-control"})
+    </div>
+    <div class="form-group">
+        @Html.Label(@Localizer["Plan"].Value)
+        @Html.TextBoxFor((m => m.Plan),"{0:dd/MM/yyyy}",
+            new {disabled = "disabled",@class = "form-control"})
+    </div>
+    @if(! string.IsNullOrEmpty(@Model.Fact.ToString()))
+    {
+        <div class="form-group">
+            @Html.Label(@Localizer["Fact"].Value)
+            @Html.TextBoxFor((m => m.Fact),"{0:dd/MM/yyyy}",
+                new {disabled = "disabled",@class = "form-control"})
+         </div>
+    }
+}
+
+</div>
+
+@await Html.PartialAsync("_SubTasksDetailsPartialView",Model.SubTasks)
+
+@await Html.PartialAsync("_ControllerActionsWithItemsPartialView")
+

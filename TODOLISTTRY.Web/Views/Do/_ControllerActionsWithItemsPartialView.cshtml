@@ -1,0 +1,34 @@
+﻿@model DoDetailsViewModel
+@inject IHtmlLocalizer<SharedResource> Localizer
+
+
+@*@//TODO: Локализация*@
+<div class="d-flex flex-column flex-sm-row justify-content-around m-2">
+
+    @Html.ActionLink($"{Localizer["AddSubTaskButtonText"].Value}","AddSubTaskView","Do",
+        new {Model.Id},new 
+        {
+            data_ajax = "true",
+            data_ajax_method = "GET",
+            data_ajax_update = "#ajaxupdating",
+            @class = "btn btn-primary"
+        }
+    )
+    @Html.ActionLink($"{Localizer["UpdateButtonText"].Value}","UpdateView","Do",
+        new {Model.Id},new 
+        {
+            data_ajax = "true",
+            data_ajax_method = "GET",
+            data_ajax_update = "#ajaxupdating",
+            @class = "btn btn-warning"
+        }
+    )     
+    @Html.ActionLink($"{Localizer["DeleteButtonText"].Value}","Delete","Do",
+        new {Model.Id},new 
+        {
+            data_ajax_method = "GET",
+            data_ajax_update = "#ajaxupdating",
+            @class = "btn btn-danger"
+        }
+    )
+</div>

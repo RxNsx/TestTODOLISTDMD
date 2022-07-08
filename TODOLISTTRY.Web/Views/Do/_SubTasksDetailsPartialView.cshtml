@@ -1,0 +1,25 @@
+﻿@model IEnumerable<DoDetailsViewModel>
+@inject IHtmlLocalizer<SharedResource> Localizer
+
+<div id="subtasks_underlist" class="m-2">
+    @if(@Model.Count() > 0)
+    {
+        <div class="text-center">
+            <h6>@Localizer["SubtaskCount"]: @Model.Count()</h6>
+        </div>
+    }
+    <ul class="list-group">
+    @foreach(var task in Model)
+    {
+        <li class="list-group-item">
+            <b>@Localizer["TaskName"]</b> @task.Title<br>
+            <b>@Localizer["TaskStatus"]</b> @task.Status<br>
+            <b>@Localizer["TaskPlan"]</b> @task.Plan.ToShortDateString()<br>
+            @if(@task.Fact.HasValue)
+            {
+                <b>@Localizer["TaskFact"]</b> @task.Fact.Value.ToShortDateString();
+            }
+        </li>
+    }
+    </ul>
+</div>
